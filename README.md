@@ -289,37 +289,32 @@ docker run --rm -p 8080:8080 \
 
 Open `http://localhost:8080` after the container starts. Live searches require `SERPAPI_KEY`; Gemma is optional and can be disabled with `ENABLE_LLM=false`.
 
-### Judge quick start with Docker
+### Judge setup on Linux
 
-This is the shortest reproducible path for a Linux judge. Docker is the only host dependency required; Node.js and npm are installed inside the image.
+A Docker container is a packaged copy of the application. It includes the project dependencies and compiled frontend/API, so judges do not need to install Node.js or npm.
+
+Prerequisite: Docker Engine.
 
 ```bash
 git clone https://github.com/DeepSaha25/omnirush-Buildathon.git hustleradar
 cd hustleradar
-cp .env.example .env
-printf '\nENABLE_LLM=false\n' >> .env
-docker build --tag hustleradar:judge .
-docker run --rm --name hustleradar-judge \
-  --env-file .env \
-  --publish 8080:8080 \
-  hustleradar:judge
+docker build -t hustleradar:judge .
+docker run --rm -e ENABLE_LLM=false -p 8080:8080 hustleradar:judge
 ```
 
-Open `http://localhost:8080` in a browser. The deterministic mode does not require SerpApi or Gemma credentials and is suitable for reviewing the application flow offline. To test live market evidence, add a valid `SERPAPI_KEY` to `.env` before starting the container.
+Open `http://localhost:8080` in a browser. This offline mode needs no API keys.
 
-In a second terminal, verify the API container:
+Optional health check:
 
 ```bash
 curl http://localhost:8080/api/health
 ```
 
-Stop the judge container with `Ctrl+C`, or run:
+For live SerpApi evidence, run the container with a configured `SERPAPI_KEY`:
 
 ```bash
-docker stop hustleradar-judge
+docker run --rm -e ENABLE_LLM=false -e SERPAPI_KEY=your_key -p 8080:8080 hustleradar:judge
 ```
-
-The image build runs the production server and serves the compiled frontend from the same container. The Docker build context excludes local secrets, dependency folders, generated output and private workspace files.
 
 ## Vercel deployment
 
