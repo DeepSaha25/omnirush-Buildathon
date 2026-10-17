@@ -168,7 +168,7 @@ apps/web/src/
   pages/               Landing page and investigator flow
   components/          Reports, evidence panels, charts and UI effects
   lib/                 API client, types and browser utilities
-vercel.json            Vercel frontend and serverless API configuration
+ render.yaml            Render frontend and API Blueprint
 .env.example           Redacted local configuration template
 package.json           Workspace scripts
 package-lock.json      Root dependency lockfile
@@ -316,41 +316,19 @@ For live SerpApi evidence, run the container with a configured `SERPAPI_KEY`:
 docker run --rm -e ENABLE_LLM=false -e SERPAPI_KEY=your_key -p 8080:8080 hustleradar:judge
 ```
 
-## Vercel deployment
+## Render deployment
 
-The repository contains a root `vercel.json` for direct deployment as one Vercel project:
+The live application is deployed at [hustleradar.onrender.com](https://hustleradar.onrender.com). The repository contains `render.yaml` with a static frontend service and a Node/Express API service.
 
-- Vite builds the frontend into `apps/web/dist`.
-- `api/index.js` exposes the Express API as a Vercel Function.
-- `apps/server/dist` is included in the function bundle after the build.
-- `/api/*` requests are routed to the serverless API.
-- All other routes fall back to the Vite SPA entrypoint.
+Deploy with the Blueprint:
 
-Deploy from the repository root:
+1. Open the Render dashboard.
+2. Create a new Blueprint from this repository.
+3. Apply `render.yaml`.
+4. Configure `SERPAPI_KEY` and optional Gemma settings as deployment secrets.
+5. Open [hustleradar.onrender.com](https://hustleradar.onrender.com).
 
-```bash
-npx vercel
-npx vercel --prod
-```
-
-Configure these Vercel project environment variables before production use:
-
-```env
-SERPAPI_KEY=your_serpapi_key_here
-ENABLE_LLM=true
-GEMMA_API_KEY=your_gemma_api_key_here
-GEMMA_MODEL_NAME=gemma2:9b
-```
-
-For a deterministic deployment without model calls, set `ENABLE_LLM=false`. Local Ollama at `127.0.0.1` is not reachable from a Vercel Function; use a supported remote Gemma-compatible endpoint or the deterministic fallback in production.
-
-After deployment, verify:
-
-```text
-https://<your-vercel-domain>/api/health
-```
-
-The health endpoint returns service status, provider configuration state, analysis version and timestamp without exposing credentials.
+The API health endpoint is available at [hustleradar.onrender.com/api/health](https://hustleradar.onrender.com/api/health).
 
 ## Reproducibility and operational boundaries
 
@@ -378,9 +356,9 @@ Gemma 2 is used as a constrained deal auditor and resale advisor. It receives st
 
 SerpApi supplies the live grounding layer through Shopping, retailer-restricted and dated context searches. The adapter validates currency, URLs, listing identity, availability and source status before evidence reaches the decision engine.
 
-### Vercel
+### Render
 
-Vercel serves the Vite frontend and the Express API through the root `vercel.json` configuration. The frontend is deployed as static assets, while `api/index.js` adapts the compiled Express application to a Vercel Function.
+Render serves the static Vite frontend and Node/Express API through the checked-in `render.yaml` Blueprint. Deployment configuration and provider secrets remain outside the source tree.
 
 ## Security and privacy
 
