@@ -179,7 +179,7 @@ for every scan. The rationale should always be populated.
 
 ## Task 6 — Run TypeScript check + confirm build is clean
 ```bash
-cd /Users/deepsaha/Documents/projects/HustleRadar
+cd <repository-root>
 npx tsc --project apps/web/tsconfig.json --noEmit
 npx tsc --project apps/server/tsconfig.json --noEmit
 ```

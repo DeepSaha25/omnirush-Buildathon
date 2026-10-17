@@ -176,7 +176,7 @@ package-lock.json      Root dependency lockfile
 
 ## Requirements
 
-- Node.js 20 LTS, pinned by `.nvmrc`.
+- Node.js 20.11.1, pinned by `.nvmrc` and the Docker image.
 - npm 10 or newer.
 - A SerpApi account and API key for live market scans.
 - Ollama with `gemma2:9b` or another configured Gemma-compatible endpoint for local model explanations. LLM access is optional; deterministic rationale works without it.
@@ -188,7 +188,7 @@ The repository includes lockfiles. Use `npm ci` for reproducible installation in
 ### Clone and install
 
 ```bash
-git clone https://github.com/DeepSaha25/HustleRadar.git hustleradar
+git clone https://github.com/DeepSaha25/omnirush-Buildathon.git hustleradar
 cd hustleradar
 npm ci
 ```

@@ -1,0 +1,17 @@
+.git
+.gitignore
+.env
+.env.*
+.opencode
+node_modules
+**/node_modules
+dist
+**/dist
+.data
+*.log
+*.mov
+*.mp4
+*.DS_Store
+playwright-report
+test-results
+artifacts
